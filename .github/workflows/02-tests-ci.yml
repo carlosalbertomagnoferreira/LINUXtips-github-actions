@@ -1,7 +1,8 @@
 name: "Nível 2: Testes Automatizados"
 on:
-  pull_request:
-    branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
+  workflow_dispatch:
 
 env:
   NODE_VERSION: '18'
@@ -20,10 +21,8 @@ jobs:
       - name: "Checkout do código"
         uses: actions/checkout@v4
 
-      # INSIRA AQUI A LÓGICA PARA RODAR OS TESTES E VERIFICAR A COBERTURA
-      ###
-      ###
-      ###
+      - name: Executando testes
+        run: npm run tests
 
       - name: "Extrair porcentagem de cobertura" # Esse step será validado pelo desafio, não altere o nome. No final, ele deve gerar o output "coverage" com a porcentagem de cobertura.
         id: coverage
@@ -31,6 +30,11 @@ jobs:
           COVERAGE=$(npx nyc report --reporter=text-summary | grep -oP 'Statements\s*:\s*\K[0-9\.]+(?=%)' | head -1)
           echo "Coverage: $COVERAGE%"
           echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+      
+      - name: Verificando cobertura dos testes
+        if: steps.coverage.outputs.covarege < ${{ env.COVERAGE_MIN }}
+        run: |
+          echo "A cobertura foi de ${{ steps.coverage.outputs.covarege }}, e o esperado era ${{ env.COVERAGE_MIN }}"
 
   generate-certificate: # DAQUI PARA BAIXO, NÃO ALTERAR
       name: "Desafio Nível 2 - Certificado"
