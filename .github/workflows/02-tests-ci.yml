@@ -1,4 +1,5 @@
 name: "Nível 2: Testes Automatizados"
+
 on:
   # pull_request:
   #   branches: [ main ]
@@ -20,6 +21,19 @@ jobs:
     steps:
       - name: "Checkout do código"
         uses: actions/checkout@v4
+
+      - name: "Setup Node.js"
+        id: setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: "Instalar dependências"
+        run: |
+          echo "Instalando dependências..."
+          npm ci
+          echo "Dependências instaladas com sucesso!"
 
       - name: Executando testes
         run: npm run tests
