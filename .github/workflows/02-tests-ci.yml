@@ -1,9 +1,9 @@
 name: "Nível 2: Testes Automatizados"
 
 on:
-  # pull_request:
-  #   branches: [ main ]
-  workflow_dispatch:
+  pull_request:
+    branches: [ main ]
+  # workflow_dispatch:
 
 env:
   NODE_VERSION: '18'
