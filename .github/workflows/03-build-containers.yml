@@ -50,13 +50,13 @@ jobs:
           context: .
           push: false
           tags: |
-            ${{ github.actor }}/linuxtips-desafio-githubactions:${{ steps.meta.outputs.SHORT_SHA }}
-            ${{ github.actor }}/linuxtips-desafio-githubactions:latest
+            ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:${{ steps.meta.outputs.SHORT_SHA }}
+            ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:latest
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: 'ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:${{ github.sha }}'
+          image-ref: 'ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:${{ steps.meta.outputs.SHORT_SHA }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -65,8 +65,8 @@ jobs:
       
       - name: Push to GHCR
         run: |
-          docker push ${{ github.actor }}/linuxtips-desafio-githubactions:${{ steps.meta.outputs.SHORT_SHA }}
-          docker push ${{ github.actor }}/linuxtips-desafio-githubactions:latest
+          docker push ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:${{ steps.meta.outputs.SHORT_SHA }}
+          docker push ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:latest
 
   generate-certificate: # DAQUI PARA BAIXO, NÃO ALTERAR
     name: "Desafio Nível 3 - Certificado"
