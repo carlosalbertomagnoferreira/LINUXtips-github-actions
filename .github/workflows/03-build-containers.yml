@@ -50,8 +50,8 @@ jobs:
           context: .
           push: false
           tags: |
-            ${{ github.actor }}/${{ github.repository }}:${{ steps.meta.outputs.SHORT_SHA }}
-            ${{ github.actor }}/${{ github.repository }}:latest
+            ${{ github.actor }}/linuxtips-desafio-githubactions:${{ steps.meta.outputs.SHORT_SHA }}
+            ${{ github.actor }}/linuxtips-desafio-githubactions:latest
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
