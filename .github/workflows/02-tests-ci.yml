@@ -46,9 +46,10 @@ jobs:
           echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
       
       - name: Verificando cobertura dos testes
-        if: steps.coverage.outputs.covarege < ${{ env.COVERAGE_MIN }}
+        if: ${{ steps.coverage.outputs.covarege < env.COVERAGE_MIN }}
         run: |
           echo "A cobertura foi de ${{ steps.coverage.outputs.covarege }}, e o esperado era ${{ env.COVERAGE_MIN }}"
+          exit 1
 
   generate-certificate: # DAQUI PARA BAIXO, NÃO ALTERAR
       name: "Desafio Nível 2 - Certificado"

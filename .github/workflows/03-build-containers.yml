@@ -18,10 +18,12 @@ env:
 jobs:
   build-scan-and-push:
     name: "Build, Lint, Trivy Scan e Push no GHCR"
-    if: #????
+#     if: #????
     runs-on: ubuntu-latest
 
     steps:
+      - name: Passe
+        run: echo "Passando"
       # AQUI VAI O CÓDIGO DO DESAFIO :)
 
   generate-certificate: # DAQUI PARA BAIXO, NÃO ALTERAR
