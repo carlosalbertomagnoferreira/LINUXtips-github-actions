@@ -76,7 +76,7 @@ jobs:
             - Lógica de validação com coverage mínimo
             - Upload de artefatos
 
-            **Cobertura:** >= ${{ env.COVERAGE_MIN }}%
+            **Cobertura:** ${{ needs.tests-and-coverage.outputs.coverage }} >= ${{ env.COVERAGE_MIN }}%
             **Data de conclusão:** $(date)
             **Repositório:** ${{ github.repository }}
             **Workflow:** ${{ github.run_id }}
