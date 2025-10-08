@@ -60,7 +60,7 @@ jobs:
 
       - name: Docker Image Smoke Test
         run: |
-          docker container run -d -p8181:80 ${{ vars.IMAGE_NAME }}:latest
+          docker container run -d -p8181:3000 ${{ vars.IMAGE_NAME }}:latest
           sleep 5
           response=$(curl -o /dev/null -s -w "%{http_code}\n" localhost:8181/health)
           echo $response
