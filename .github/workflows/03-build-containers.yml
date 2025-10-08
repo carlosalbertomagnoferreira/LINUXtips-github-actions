@@ -22,7 +22,7 @@ env:
 jobs:
   build-scan-and-push:
     name: "Build, Lint, Trivy Scan e Push no GHCR"
-    if: ${{ github.event.workflow_run.conclusion == "success" }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     outputs:
       tag-image: ${{ steps.meta.outputs.SHORT_SHA }}
