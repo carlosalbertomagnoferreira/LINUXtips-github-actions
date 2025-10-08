@@ -4,10 +4,10 @@ on:
   workflow_run:
     workflows: ["Nível 1: Basic CI", "Nível 2: Testes Automatizados"]
     types: [completed]
-  # pull_request:
-  #   types: [closed]
-  #   branches: [ desafio-nivel-3 ]
-  # workflow_dispatch:
+  pull_request:
+    types: [closed]
+    branches: [ desafio-nivel-3 ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,7 +21,7 @@ env:
 jobs:
   build-scan-and-push:
     name: "Build, Lint, Trivy Scan e Push no GHCR"
-    if: github.event.workflow_run.conclusion == 'success'
+    if: ( github.event.workflow_run.conclusion == 'success' && github.event.pull_request.merged == true )
     runs-on: ubuntu-latest
     outputs:
       tag-image: ${{ steps.meta.outputs.SHORT_SHA }}
@@ -53,13 +53,27 @@ jobs:
           context: .
           push: false
           tags: |
-            ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:${{ steps.meta.outputs.SHORT_SHA }}
-            ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:latest
+            ghcr.io/${{ github.actor }}/${{ vars.IMAGE_NAME }}:${{ steps.meta.outputs.SHORT_SHA }}
+            ghcr.io/${{ github.actor }}/${{ vars.IMAGE_NAME }}:latest
+
+      - name: Docker Image Smoke Test
+        run: |
+          docker container run -d -p8181:80 ghcr.io/${{ github.actor }}/${{ vars.IMAGE_NAME }}:${{ steps.meta.outputs.SHORT_SHA }}
+          sleep 5
+          response=$(curl -o /dev/null -s -w "%{http_code}\n" localhost:8181/health)
+          echo $response
+          if [ $response -eq 200 ]; then
+            echo 'Success'
+            exit 0
+          else
+            echo 'Failed'
+            exit 1
+          fi
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: 'ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:${{ steps.meta.outputs.SHORT_SHA }}'
+          image-ref: 'ghcr.io/${{ github.actor }}/${{ vars.IMAGE_NAME }}:${{ steps.meta.outputs.SHORT_SHA }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -68,8 +82,8 @@ jobs:
       
       - name: Push to GHCR
         run: |
-          docker push ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:${{ steps.meta.outputs.SHORT_SHA }}
-          docker push ghcr.io/${{ github.actor }}/linuxtips-desafio-githubactions:latest
+          docker push ghcr.io/${{ github.actor }}/${{ vars.IMAGE_NAME }}:${{ steps.meta.outputs.SHORT_SHA }}
+          docker push ghcr.io/${{ github.actor }}/${{ vars.IMAGE_NAME }}:latest
 
   generate-certificate: # DAQUI PARA BAIXO, NÃO ALTERAR
     name: "Desafio Nível 3 - Certificado"
