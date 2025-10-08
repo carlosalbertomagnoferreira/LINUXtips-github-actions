@@ -1,8 +1,10 @@
 name: "Nível 2: Testes Automatizados"
 
 on:
-  pull_request:
+  push:
     branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
   workflow_dispatch:
 
 env:
