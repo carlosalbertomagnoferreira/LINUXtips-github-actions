@@ -54,12 +54,13 @@ jobs:
           context: .
           push: false
           tags: |
+            ${{ vars.IMAGE_NAME }}:latest
             ghcr.io/${{ env.REPOSITORY_IMAGE }}:${{ steps.meta.outputs.SHORT_SHA }}
             ghcr.io/${{ env.REPOSITORY_IMAGE }}:latest
 
       - name: Docker Image Smoke Test
         run: |
-          docker container run -d -p8181:80 ghcr.io/${{ env.REPOSITORY_IMAGE }}:${{ steps.meta.outputs.SHORT_SHA }}
+          docker container run -d -p8181:80 ${{ vars.IMAGE_NAME }}:latest
           sleep 5
           response=$(curl -o /dev/null -s -w "%{http_code}\n" localhost:8181/health)
           echo $response
