@@ -1,9 +1,6 @@
 name: "Nível 3: Containers e Segurança"
 
 on:
-  # workflow_run:
-  #   workflows: ["Nível 1: Basic CI", "Nível 2: Testes Automatizados"]
-  #   types: completed
   pull_request:
     types: [closed]
     branches: [ desafio-nivel-3 ]
