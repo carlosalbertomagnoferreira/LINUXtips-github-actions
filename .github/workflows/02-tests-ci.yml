@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
   CHALLENGE_LEVEL: 2
   CHALLENGE_NAME: "testes-automatizados"
   COVERAGE_MIN: 80 # Cobertura mínima exigida em porcentagem
